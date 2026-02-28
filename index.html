@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Tugas Praktikum Rangkaian Lampu</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .rangkaian { margin-bottom: 30px; border-bottom: 2px solid #ccc; padding-bottom: 20px; }
+        img { margin: 5px; }
+        button { margin: 5px; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h1>Simulasi Rangkaian Listrik</h1>
+
+    <div class="rangkaian">
+        <h3>Rangkaian 1: 3 Lampu</h3>
+        <img id="r1_l1" src="off.gif" width="100">
+        <img id="r1_l2" src="off.gif" width="100">
+        <img id="r1_l3" src="off.gif" width="100">
+        
+        <p>Kontrol:</p>
+        <button onclick="r1SatuPersatu()">Button 1 (Satu per Satu)</button>
+        <button onclick="r1Semua()">Button 2 (Semua Lampu)</button>
+    </div>
+
+    <div class="rangkaian">
+        <h3>Rangkaian 2: 4 Lampu (A, B, C, D)</h3>
+        <img id="lA" src="off.gif" width="80">
+        <img id="lB" src="off.gif" width="80">
+        <img id="lC" src="off.gif" width="80">
+        <img id="lD" src="off.gif" width="80">
+        
+        <p>Kontrol:</p>
+        <button onclick="r2SatuPersatu()">Button 1 (Satu per Satu)</button>
+        <button onclick="r2Semua()">Button 2 (Semua Lampu)</button>
+        <button onclick="r2Grup()">Button 3 (Grup AB & CD)</button>
+    </div>
+
+    <script>
+        // --- LOGIKA RANGKAIAN 1 ---
+        let urutanR1 = 0;
+        function r1SatuPersatu() {
+            const lampu = [document.getElementById('r1_l1'), document.getElementById('r1_l2'), document.getElementById('r1_l3')];
+            // Toggle status lampu yang sedang ditunjuk urutan
+            if (lampu[urutanR1].src.includes('off.gif')) {
+                lampu[urutanR1].src = 'on.gif';
+            } else {
+                lampu[urutanR1].src = 'off.gif';
+            }
+            // Geser urutan ke lampu berikutnya
+            urutanR1 = (urutanR1 + 1) % 3;
+        }
+
+        function r1Semua() {
+            const lampu = [document.getElementById('r1_l1'), document.getElementById('r1_l2'), document.getElementById('r1_l3')];
+            // Cek lampu pertama, jika mati maka nyalakan semua, jika nyala maka matikan semua
+            let target = lampu[0].src.includes('off.gif') ? 'on.gif' : 'off.gif';
+            lampu.forEach(l => l.src = target);
+        }
+
+        // --- LOGIKA RANGKAIAN 2 ---
+        let urutanR2 = 0;
+        function r2SatuPersatu() {
+            const lampu = [document.getElementById('lA'), document.getElementById('lB'), document.getElementById('lC'), document.getElementById('lD')];
+            if (lampu[urutanR2].src.includes('off.gif')) {
+                lampu[urutanR2].src = 'on.gif';
+            } else {
+                lampu[urutanR2].src = 'off.gif';
+            }
+            urutanR2 = (urutanR2 + 1) % 4;
+        }
+
+        function r2Semua() {
+            const ids = ['lA', 'lB', 'lC', 'lD'];
+            let target = document.getElementById('lA').src.includes('off.gif') ? 'on.gif' : 'off.gif';
+            ids.forEach(id => document.getElementById(id).src = target);
+        }
+
+        function r2Grup() {
+            const grup1 = [document.getElementById('lA'), document.getElementById('lB')];
+            const grup2 = [document.getElementById('lC'), document.getElementById('lD')];
+            
+            // Logika: Jika grup AB mati, nyalakan semua (AB & CD). Jika sudah nyala, matikan semua.
+            let target = grup1[0].src.includes('off.gif') ? 'on.gif' : 'off.gif';
+            
+            grup1.forEach(l => l.src = target);
+            grup2.forEach(l => l.src = target);
+        }
+    </script>
+</body>
+</html>
